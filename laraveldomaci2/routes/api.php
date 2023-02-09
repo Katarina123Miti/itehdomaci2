@@ -6,6 +6,10 @@ use App\Http\Controllers\SvedokController;
 use App\Http\Controllers\KrivicnoDeloController;
 use App\Http\Controllers\SudijaController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserSvedokController;
+use App\Http\Controllers\SudijaSvedokController;
+use App\Http\Controllers\KrivicnoDeloSvedokController;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,13 +22,38 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-}); 
-Route::resource('krivicno_delos', KrivicnoDeloController::class);
+//moj profil
+Route::middleware('auth:sanctum')->get('/myprofile', function (Request $request) {
+    return new UserResource($request->user());
+});
 
-Route::resource('sudijas', SudijaController::class);
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    //admin
+    Route::resource('krivicnadela', KrivicnoDeloController::class)->only(['store', 'update', 'destroy']); 
+    Route::resource('sudijas', SudijaController::class)->only(['store', 'update', 'destroy']); 
+    Route::resource('users', UserController::class)->only(['destroy']); 
+    Route::post('/register', [AuthController::class, 'register']); 
+    Route::resource('users', UserController::class)->only(['index', 'show']); 
+    //user
+    Route::resource('svedok', SvedokController::class)->only(['store', 'update', 'destroy']); 
+    
+    //svi koji su ulogovani
+    Route::post('/logout', [AuthController::class, 'logout']); 
+    Route::get('/mysvedok', [UserSvedokController::class, 'mysvedok']); 
+    Route::resource('users', UserController::class)->only(['update']);
 
-Route::resource('svedok', SvedokController::class);
+});
+//javne
+Route::resource('krivicnadela', KrivicnoDeloController::class)->only(['index', 'show']);
 
-Route::resource('users', UserController::class)->only(['index', 'show']);
+Route::resource('sudije', SudijaController::class)->only(['index', 'show']);
+
+Route::resource('svedok', SvedokController::class)->only(['index', 'show']);
+
+Route::get('/users/{id}/svedok', [UserSvedokController::class, 'index']);
+
+Route::get('/sudijas/{id}/svedok', [SudijaSvedokController::class, 'index']);
+
+Route::get('/krivicno_delos/{id}/svedok', [KrivicnoDeloSvedokController::class, 'index']);
+
+Route::post('/login', [AuthController::class, 'login']);

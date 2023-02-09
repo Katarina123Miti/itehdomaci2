@@ -3,6 +3,9 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\UserResource;
+use App\Http\Resources\KrivicnoDeloResource;
+use App\Http\Resources\SudijaResource;
 
 class SvedokResource extends JsonResource
 {
@@ -18,9 +21,9 @@ class SvedokResource extends JsonResource
     {
         return [
             'datumIVreme' => $this->resource->datumIVreme,
-            'user' => $this->resource->user,
-            'krivicnodelo' => $this->resource->krivicnodelo,
-            'sudija' => $this->resource->sudija,
+            'user' => new UserResource($this->resource->userkey),
+            'krivicnodelo' => new KrivicnoDeloResource($this->resource->krivicnodelokey),
+            'sudija' => new SudijaResource($this->resource->sudijakey),
             'note' => $this->resource->note,
         ];
     }

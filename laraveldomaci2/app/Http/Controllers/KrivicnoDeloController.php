@@ -9,6 +9,7 @@ use App\Models\Sudija;
 use App\Models\User;
 use App\Http\Resources\KrivicnoDeloResource;
 use App\Http\Resources\KrivicnoDeloCollection;
+use Illuminate\Support\Facades\Validator;
 
 class KrivicnoDeloController extends Controller
 {
@@ -40,7 +41,21 @@ class KrivicnoDeloController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'naziv' => 'required|string|max:150|unique:services',
+        ]);
+
+        if ($validator->fails())
+            return response()->json($validator->errors());
+
+        if(auth()->user()->isUser())
+            return response()->json('You are not authorized to create new krivicnadela.'); 
+
+        $krivicnoDelo = KrivicnoDelo::create([
+            'naziv' => $request->naziv,
+        ]);
+
+        return response()->json(['Krivicno delo is created successfully.', new KrivicnoDeloResource($krivicnoDelo)]);
     }
 
     /**
@@ -74,7 +89,20 @@ class KrivicnoDeloController extends Controller
      */
     public function update(Request $request, KrivicnoDelo $krivicnoDelo)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'naziv' => 'required|string|max:150|unique:services,name,' .$krivicnoDelo->id,
+        ]);
+
+        if ($validator->fails())
+            return response()->json($validator->errors());
+
+        if(auth()->user()->isUser())
+            return response()->json('You are not authorized to update krivicnadela.');     
+        $krivicnoDelo->naziv = $request->naziv;
+
+        $krivicnoDelo->save();
+
+        return response()->json(['Krivicno delo is updated successfully.', new KrivicnoDeloResource($krivicnoDelo)]);
     }
 
     /**
@@ -85,6 +113,15 @@ class KrivicnoDeloController extends Controller
      */
     public function destroy(KrivicnoDelo $krivicnoDelo)
     {
-        //
+        if(auth()->user()->isUser())
+             return response()->json('You are not authorized to delete krivicnadela.');
+        
+        $svedok = Svedok::get()->where('krivicnodelo', $krivicnodelo->id);
+        if (count($svedok) > 0)
+            return response()->json('You cannot delete krivicnadela that have svedoks.');
+       
+        $krivicnoDelo->delete();
+
+        return response()->json('Krivicno delo is deleted successfully.');
     }
 }

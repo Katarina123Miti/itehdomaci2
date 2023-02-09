@@ -8,6 +8,8 @@ use \App\Models\User;
 use \App\Models\Sudija;
 use \App\Models\KrivicnoDelo;
 use \App\Models\Svedok;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -26,6 +28,18 @@ class DatabaseSeeder extends Seeder
 
         User::factory(5)->create();
         Sudija::factory(10)->create();
+
+        $user = User::create([
+            'name' => 'Katarina',
+            'email' => 'kmitic764@gmail.com',
+            'password' => Hash::make('Katarina123.'),
+            'email_verified_at' => now(),
+            'remember_token' => Str::random(10),
+            'role' => 'admin'
+        ]);
+
+        User::factory(5)->create();
+        Provider::factory(10)->create();
 
         $krivicnodelo1 = KrivicnoDelo::create([
             'naziv' => 'krivicno delo protiv zivota i tela'
@@ -49,7 +63,7 @@ class DatabaseSeeder extends Seeder
 
         $svedok1 = Svedok::create([
             'datumIVreme' => now(),
-            'user' => 1,
+            'user' => 2,
             'krivicnodelo' => 1,
             'sudija'=>2,
             'note' => 'Svedok video i priznao sve.'
@@ -57,7 +71,7 @@ class DatabaseSeeder extends Seeder
 
         $svedok2 = Svedok::create([
             'datumIVreme' => now(),
-            'user' => 2,
+            'user' => 3,
             'krivicnodelo' => 1,
             'sudija'=>1,
             'note' => 'Svedok delimicno video izvrseno krivicno delo, nije siguran.'

@@ -17,6 +17,7 @@ class KrivicnoDeloResource extends JsonResource
     public function toArray($request)
     {
         return [
+            
             'naziv'=>$this->resource->naziv,
 
         ];
