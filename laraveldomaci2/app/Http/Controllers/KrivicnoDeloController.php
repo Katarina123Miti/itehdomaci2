@@ -42,7 +42,7 @@ class KrivicnoDeloController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'naziv' => 'required|string|max:150|unique:services',
+            'naziv' => 'required|string|max:150|unique:krivicno_delos',
         ]);
 
         if ($validator->fails())
@@ -90,7 +90,7 @@ class KrivicnoDeloController extends Controller
     public function update(Request $request, KrivicnoDelo $krivicnoDelo)
     {
         $validator = Validator::make($request->all(), [
-            'naziv' => 'required|string|max:150|unique:services,name,' .$krivicnoDelo->id,
+            'naziv' => 'required|string|max:150|unique:krivicno_delos,naziv,' .$krivicnoDelo->id,
         ]);
 
         if ($validator->fails())
@@ -116,7 +116,7 @@ class KrivicnoDeloController extends Controller
         if(auth()->user()->isUser())
              return response()->json('You are not authorized to delete krivicnadela.');
         
-        $svedok = Svedok::get()->where('krivicnodelo', $krivicnodelo->id);
+        $svedok = Svedok::get()->where('krivicnoDelo', $krivicnoDelo->id);
         if (count($svedok) > 0)
             return response()->json('You cannot delete krivicnadela that have svedoks.');
        

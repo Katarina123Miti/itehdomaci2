@@ -32,14 +32,12 @@ class DatabaseSeeder extends Seeder
         $user = User::create([
             'name' => 'Katarina',
             'email' => 'kmitic764@gmail.com',
-            'password' => Hash::make('Katarina123.'),
+            'password' => Hash::make('Katarina123!'),
             'email_verified_at' => now(),
             'remember_token' => Str::random(10),
             'role' => 'admin'
         ]);
 
-        User::factory(5)->create();
-        Provider::factory(10)->create();
 
         $krivicnodelo1 = KrivicnoDelo::create([
             'naziv' => 'krivicno delo protiv zivota i tela'

@@ -9,7 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserSvedokController;
 use App\Http\Controllers\SudijaSvedokController;
 use App\Http\Controllers\KrivicnoDeloSvedokController;
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\API\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,10 +30,11 @@ Route::middleware('auth:sanctum')->get('/myprofile', function (Request $request)
 Route::group(['middleware' => ['auth:sanctum']], function () {
     //admin
     Route::resource('krivicnadela', KrivicnoDeloController::class)->only(['store', 'update', 'destroy']); 
-    Route::resource('sudijas', SudijaController::class)->only(['store', 'update', 'destroy']); 
+    Route::resource('sudije', SudijaController::class)->only(['store', 'update', 'destroy']); 
     Route::resource('users', UserController::class)->only(['destroy']); 
     Route::post('/register', [AuthController::class, 'register']); 
     Route::resource('users', UserController::class)->only(['index', 'show']); 
+
     //user
     Route::resource('svedok', SvedokController::class)->only(['store', 'update', 'destroy']); 
     
@@ -50,10 +51,12 @@ Route::resource('sudije', SudijaController::class)->only(['index', 'show']);
 
 Route::resource('svedok', SvedokController::class)->only(['index', 'show']);
 
+
 Route::get('/users/{id}/svedok', [UserSvedokController::class, 'index']);
 
-Route::get('/sudijas/{id}/svedok', [SudijaSvedokController::class, 'index']);
+Route::get('/sudije/{id}/svedok', [SudijaSvedokController::class, 'index']);
 
-Route::get('/krivicno_delos/{id}/svedok', [KrivicnoDeloSvedokController::class, 'index']);
+Route::get('/krivicnadela/{id}/svedok', [KrivicnoDeloSvedokController::class, 'index']);
 
 Route::post('/login', [AuthController::class, 'login']);
+

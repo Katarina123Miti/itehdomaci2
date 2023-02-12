@@ -45,9 +45,9 @@ class SudijaController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'ime' => 'required|string|max:150',
-            'brojTelefona' => 'required|string|max:150|unique:providers',
+            'brojTelefona' => 'required|string|max:150|unique:sudijas',
             'godineIskustva' => 'required|numeric|lte:30|gte:1',
-            'email' => 'required|email|unique:providers',
+            'email' => 'required|email|unique:sudijas',
         ]);
 
         if ($validator->fails())
@@ -99,9 +99,9 @@ class SudijaController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'ime' => 'required|string|max:150',
-            'brojTelefona' => 'required|string|max:150|unique:providers,phone_number,'.$sudija->id,
+            'brojTelefona' => 'required|string|max:150|unique:sudijas,brojTelefona,'.$sudija->id,
             'godineIskustva' => 'required|numeric|lte:30|gte:1',
-            'email' => 'required|email|unique:providers,email,'.$sudija->id,
+            'email' => 'required|email|unique:sudijas,email,'.$sudija->id,
         ]);
 
         if ($validator->fails())

@@ -43,9 +43,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    
     public function svedok() {
         return $this->hasMany(Svedok::class);
     }
+
     public function isAdmin() {
         return $this->role === 'admin';
     }

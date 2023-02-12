@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('svedoks', function (Blueprint $table) {
-            $table->foreignId('sudijas');
+            $table->foreignId('sudija');
         });
     }
 
@@ -26,7 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('svedoks', function (Blueprint $table) {
-            $table->dropForeign('sudijas');
+            $table->dropForeign('sudija');
         });
     }
 };

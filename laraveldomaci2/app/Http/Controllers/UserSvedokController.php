@@ -22,7 +22,7 @@ class UserSvedokController extends Controller
         $svedok = Svedok::get()->where('user', auth()->user()->id);
         if (count($svedok) == 0)
             return response()->json('Data not found', 404);
-        return new SvedokCollection($apprat);
+        return new SvedokCollection($svedok);
 
     }
 }
